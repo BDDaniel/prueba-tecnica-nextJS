@@ -1,112 +1,248 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+//#region Libs
+import { useState } from 'react';
+//#endregion
+
+//#region Prime Components
+import { Card } from 'primereact/card';
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
+import { InputIcon } from "primereact/inputicon";
+import { IconField } from "primereact/iconfield";
+import { Dropdown } from 'primereact/dropdown';
+import { Accordion, AccordionTab } from 'primereact/accordion';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Tag } from 'primereact/tag';
+import { ProgressBar } from 'primereact/progressbar';
+import { SelectButton } from 'primereact/selectbutton';
+import { ToggleButton } from 'primereact/togglebutton';
+//#endregion
+
+export default function AppPage() {
+  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+  const [value, setValue] = useState<any | null>('Por tiempo');
+  const [inversion, setInversion] = useState<any | null>(null);
+  const [garantias, setGarantias] = useState<any | null>(null);
+  const [aprobacion, setAprobacion] = useState<any | null>(null);
+  const products = [
+    {
+      id: '1000',
+      title: 'PDS Estación Calle 84',
+      company: 'Com. Industrial',
+      code: 'SC-22-023',
+      percentage: 68,
+      status: 'A'
+    },
+    {
+      id: '1001',
+      title: 'PDS estación Calle 30',
+      company: 'Com. Industrial',
+      code: 'SC-22-023',
+      percentage: 68,
+      status: 'A'
+    },
+    {
+      id: '1002',
+      title: 'PDS Estación Brisas del Mar',
+      company: 'Com. Industrial',
+      code: 'SC-22-023',
+      percentage: 68,
+      status: 'A'
+    },
+    {
+      id: '1003',
+      title: 'PDS Estación Carrera 43',
+      company: 'Com. Industrial',
+      code: 'SC-22-023',
+      percentage: 68,
+      status: 'A'
+    },
+    {
+      id: '1004',
+      title: 'PDS Estación Torcoroma',
+      company: 'Com. Industrial',
+      code: 'SC-22-023',
+      percentage: 68,
+      status: 'A'
+    },
+    {
+      id: '1005',
+      title: 'PDS Estación Carrera 38',
+      company: 'Com. Industrial',
+      code: 'SC-22-023',
+      percentage: 68,
+      status: 'A'
+    },
+    {
+      id: '1006',
+      title: 'PDS Estación Albania Circunvalar',
+      company: 'Com. Industrial',
+      code: 'SC-22-023',
+      percentage: 68,
+      status: 'A'
+    },
+    {
+      id: '1007',
+      title: 'PDS Estación Calle 140',
+      company: 'Com. Industrial',
+      code: 'SC-22-023',
+      percentage: 68,
+      status: 'A'
+    }
+  ]
+
+  const percentageBodyTemplate = (product: any) => {
+    return <ProgressBar value={product.percentage}></ProgressBar>;
+  };
+
+  const actionsBodyTemplate = () => {
+    return <Button icon="pi pi-ellipsis-v" text raised severity="secondary" aria-label="actions" />;
+  };
+
+  const statusBodyTemplate = (product: any) => {
+    return <Tag value={product.status == 'A' ? 'Activo' : 'Inactivo'} severity={getSeverity(product)}></Tag>;
+  };
+
+  const getSeverity = (product: any) => {
+    switch (product.status) {
+      case 'A':
+        return 'success';
+
+      case 'I':
+        return 'warning';
+
+      default:
+        return null;
+    }
+  };
+
+  const dataTable = () => {
+    return (
+      <DataTable value={products} selectionMode={'radiobutton'} selection={selectedProduct!} onSelectionChange={(e) => setSelectedProduct(e.value)}
+        dataKey="id" tableStyle={{ minWidth: '50rem' }} className='hidden-header' >
+        <Column selectionMode="single" headerStyle={{ width: '3rem' }}></Column>
+        <Column field='title' className='title-dataTable'></Column>
+        <Column field='company'></Column>
+        <Column field='code'></Column>
+        <Column body={percentageBodyTemplate}></Column>
+        <Column body={statusBodyTemplate}></Column>
+        <Column body={actionsBodyTemplate}></Column>
+      </DataTable>
+    )
+  }
+
+  const header = (
+    <img alt="Card" className='border-round-top-2xl' src="https://i.postimg.cc/qBt1QPZ4/screen-barranquilla-map.png" />
+  );
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main className='flex justify-content-between align-items-center flex-nowrap flex-row background-main'>
+      <Card className='flex m-3 flex-wrap max-calc-width shadow-none'>
+        <label className='w-full'> Filtrado </label>
+        <div className='flex align-items-center mt-2'>
+          <Button type="button" label="Filtros" icon="pi pi-filter" outlined severity="secondary" badge="3" />
+          <IconField className='ml-2'>
+            <InputIcon className="pi pi-search"> </InputIcon>
+            <InputText placeholder='Buscar' disabled={true} />
+          </IconField>
+          <Dropdown optionLabel="name" placeholder="Seleccionar" className="w-full md:w-14rem" disabled={true} />
+          <label className='ml-3 text-xs'> Limpiar búsqueda </label>
         </div>
-      </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+        <h2> Zona Atlántico - Magdalena </h2>
+        <div className='max-calc-height overflow-auto scrollbar-hidden'>
+          <Accordion multiple activeIndex={[0, 1]}>
+            <AccordionTab header="Barranquilla">
+              {dataTable()}
+            </AccordionTab>
+            <AccordionTab header="Santa Marta">
+              {dataTable()}
+            </AccordionTab>
+            <AccordionTab header="Cartagena">
+              {dataTable()}
+            </AccordionTab>
+            <AccordionTab header="Riohacha">
+              {dataTable()}
+            </AccordionTab>
+            <AccordionTab header="Sincelejo">
+              {dataTable()}
+            </AccordionTab>
+            <AccordionTab header="Montería">
+              {dataTable()}
+            </AccordionTab>
+            <AccordionTab header="Fundación">
+              {dataTable()}
+            </AccordionTab>
+            <AccordionTab header="Bosconia">
+              {dataTable()}
+            </AccordionTab>
+            <AccordionTab header="Valledupar">
+              {dataTable()}
+            </AccordionTab>
+          </Accordion>
+        </div>
+      </Card>
+      <div className='flex flex-wrap background-pds'>
+        <Card header={header} className='flex m-3 flex-wrap w-full border-pds shadow-none max-calc-height-pds overflow-auto scrollbar-hidden content-nowrap content-column'>
+          <div className='flex justify-content-between align-items-center w-full div-pds'>
+            <h1 className='m-0'> PDS Estación </h1>
+            <Tag value={'Activo'} severity={'success'}></Tag>
+          </div>
+          <div className='flex justify-content-between align-items-center w-full div-pds'>
+            <h1 className='m-0'> Calle 84 </h1>
+            <Button label="Ver Cartelera" className='bg-blue-600 border-blue-600 shadow-none btn-text-sm' rounded />
+          </div>
+          <div className='flex justify-content-between align-items-center w-full div-pds mt-3 font-light text-xs'>
+            <label> Contrato N° </label>
+            <label> Consumo traido al corte de </label>
+          </div>
+          <div className='flex justify-content-between align-items-center w-full div-pds'>
+            <h4 className='m-0'> SC-22-192 </h4>
+            <label className='font-light text-xs'> 30/10/32 </label>
+          </div>
+          <div className='flex justify-content-between align-items-center w-full div-pds border-pds p-2 mt-3 flex-column'>
+            <div className='flex justify-content-between align-items-center w-full div-pds border-pds p-3 flex-column'>
+              <div className='flex justify-content-between align-items-center w-full div-pds'>
+                <label className='font-light'> Progreso de cumplimiento </label>
+              </div>
+              <div className='flex justify-content-between align-items-center w-full div-pds mt-2'>
+                <ProgressBar className='w-full hidden-percentage bg-green' value={value == 'Por tiempo' ? 64 : 82}></ProgressBar>
+              </div>
+              <div className='flex justify-content-between align-items-center w-full div-pds mt-2'>
+                <h3 className='m-0'> {value == 'Por tiempo' ? '64%' : '82%'} </h3>
+                <h3 className='font-lighter m-0'> {value == 'Por tiempo' ? '-36%' : '-18%'} </h3>
+              </div>
+            </div>
+            <div className='flex justify-content-between align-items-center w-full div-pds border-pds p-3 mt-2 flex-column'>
+              <div className='flex justify-content-between align-items-center w-full div-pds'>
+                <label className='font-light'> Progreso de cumplimiento </label>
+              </div>
+              <div className='flex justify-content-between align-items-center w-full div-pds mt-2'>
+                <ProgressBar className='w-full hidden-percentage bg-green' value={value == 'Por tiempo' ? 64 : 82}></ProgressBar>
+              </div>
+              <div className='flex justify-content-between align-items-center w-full div-pds mt-2'>
+                <h3 className='m-0'> {value == 'Por tiempo' ? '64%' : '82%'} </h3>
+                <h3 className='font-lighter m-0'> {value == 'Por tiempo' ? '-36%' : '-18%'} </h3>
+              </div>
+              <div className='flex justify-content-start align-items-center w-full div-pds mt-2'>
+                <label className='text-xs font-light mr-2'> {value == 'Por tiempo' ? 'Finalización del contrato' : 'Volumen Consumido'} </label>
+                <h4 className='m-0'> {value == 'Por tiempo' ? '01/01/25' : '123.456.789 Gal'} </h4>
+              </div>
+            </div>
+            <div className='flex justify-content-between align-items-center w-full div-pds mt-2'>
+              <SelectButton className='w-full' value={value} onChange={(e) => { if (e.value) setValue(e.value) }} options={['Por tiempo', 'Por volumen']} />
+            </div>
+          </div>
+          <div className='flex justify-content-between align-items-center w-full div-pds mt-4 font-light text-xs'>
+            <ToggleButton onIcon='pi pi-dollar' offIcon='pi pi-dollar' onLabel='Inversión' offLabel='Inversión' checked={inversion} onChange={(e) => { setInversion(e.value); setGarantias(null); setAprobacion(null) }} />
+            <ToggleButton onIcon='pi pi-book' offIcon='pi pi-book' onLabel='Garantías' offLabel='Garantías' checked={garantias} onChange={(e) => { setGarantias(e.value); setInversion(null); setAprobacion(null) }} />
+            <ToggleButton onIcon='pi pi-file-check' offIcon='pi pi-file-check' onLabel='Aprobación' offLabel='Aprobación' checked={aprobacion} onChange={(e) => { setAprobacion(e.value); setInversion(null); setGarantias(null) }} />
+          </div>
+          <div className='flex justify-content-between align-items-center w-full div-pds mt-4 font-light text-xs'>
+            <Button className='show-detail' label="Mostrar detalles de cliente" rounded />
+          </div>
+        </Card>
       </div>
     </main>
   );
